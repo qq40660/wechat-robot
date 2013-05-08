@@ -29,7 +29,7 @@ class TextMessage(Message):
     def render_xml(self):
         attrs = self.__dict__
         xml = TextMessage.TEMPLATE.format(**attrs)
-        xml = xml.encode("utf-8")
+        # xml = xml.encode("utf-8")
         return xml
 
     @staticmethod
@@ -50,7 +50,7 @@ class Article:
         self.title = title
         self.desc  = desc
         self.picurl = picurl
-        self.url = link
+        self.link = link
 
 class ArticlesMessage(Message):
     TEMPLATE = to_unicode("""
@@ -85,4 +85,10 @@ class ArticlesMessage(Message):
             self._articles.append(article)
 
     def render_xml(self):
-        pass
+        attrs = self.__dict__
+        attrs["count"] = len(self._articles)
+        items = [ArticlesMessage.ITEM_TEMPLATE.format(**article.__dict__)
+                 for article in self._articles]
+        attrs["items"] = "".join(items)
+        xml = ArticlesMessage.TEMPLATE.format(**attrs)
+        return xml
