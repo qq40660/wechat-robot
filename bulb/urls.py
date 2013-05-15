@@ -1,5 +1,6 @@
 from django.conf.urls import patterns, include, url
 from bulb.views import index
+from bulb import settings
 
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
@@ -7,7 +8,8 @@ from bulb.views import index
 
 urlpatterns = patterns('',
     url(r'^$', index.index, name="index"),
-
+    url(r'^site_media/(?P<path>.*)$', 'django.views.static.serve',
+        {'document_root': settings.MEDIA_ROOT}),
     # Examples:
     # url(r'^$', 'mysite.views.home', name='home'),
     # url(r'^mysite/', include('mysite.foo.urls')),

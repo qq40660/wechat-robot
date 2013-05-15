@@ -49,8 +49,8 @@ class Robot:
         for user_id in self.user_ids:
             self.speak(user_id, message)
 
-def handle(request):
-    message = TextMessage.from_xml(request)
-    reply = Robot().get_reply(message)
-    return reply
+# def handle(request):
+#     message = TextMessage.from_xml(request)
+#     reply = Robot().get_reply(message)
+#     return reply
 

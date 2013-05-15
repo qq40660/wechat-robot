@@ -1,8 +1,9 @@
 from django.http import HttpResponse
 from bulb.views.verify import Verification
-import robot
+from message import Message, TextMessage
+from robot import Robot
+import cacti
 
-__author__ = "hellojohn201@gmail.com"
 
 def index(request):
     if request.method == "GET":
@@ -20,6 +21,10 @@ def handle_get(request):
     return HttpResponse(result, content_type="text/plain")
 
 def handle_post(request):
-    reply = robot.handle(request.body)
+    print request.body
+    message = TextMessage.from_xml(request.body)
+    bot = Robot()
+    bot.add_handler(cacti.handler)
+    reply = bot.get_reply(message)
     return HttpResponse(reply, content_type="application/xml")
 

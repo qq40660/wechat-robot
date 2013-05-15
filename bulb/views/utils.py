@@ -1,3 +1,11 @@
+import urllib2
+
+
+class HTTPHelper:
+    pass
+
+
+
 
 def to_unicode(value):
     if isinstance(value, unicode):
