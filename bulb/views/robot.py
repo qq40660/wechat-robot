@@ -3,20 +3,25 @@
 from inspect import isfunction
 from message import Message, TextMessage
 from utils import to_unicode
+from push import BaseClient
 import time
+
+EMAIL  = "hellojohn201@gmail.com"
+PASSWD = "13878300"
 
 class Robot:
     """ A wechat robot.
     """
-    user_ids = []
+    users = []
 
     def __init__(self):
+        self.pusher = BaseClient(email=EMAIL, passwd=PASSWD)
         self._handlers = {
             "text"  : [],
             "image" : [],
             "link"  : [],
             "voice" : [],
-            } 
+            }
 
     def add_handler(self, function, type="text"):
         if not isfunction(function):
@@ -43,11 +48,13 @@ class Robot:
         return reply.render_xml()
 
     def speak(self, to_user, message):
-        pass
+        self.pusher.send_msg(to_user, message)
 
-    def broadcast(self, message):
-        for user_id in self.user_ids:
-            self.speak(user_id, message)
+    def broadcast(self, to_users, message):
+        if to_users == "all":
+            to_users = self.users
+        for to_user in to_users:
+            self.speak(to_user, message)
 
 # def handle(request):
 #     message = TextMessage.from_xml(request)

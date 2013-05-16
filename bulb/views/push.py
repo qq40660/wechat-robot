@@ -46,7 +46,7 @@ class BaseClient:
         headers = [
             ('Accept', 'application/json, text/javascript, */*; q=0.01'),
             ('Accept-Charset', 'GBK,utf-8;q=0.7,*;q=0.3'),
-            ('Accept-Encoding', 'gzip,deflate,sdch'),
+        #    ('Accept-Encoding', 'gzip,deflate,sdch'),
             ('Accept-Language', 'en,zh-CN;q=0.8,zh;q=0.6'),
             ('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.31'
                            '(KHTML, like Gecko) Chrome/26.0.1410.64 Safari/537.31')
@@ -62,7 +62,6 @@ class BaseClient:
         headers = dict(self._opener.addheaders)
         headers.update([refer])
         self._opener.addheaders = list(headers.viewitems())
-        # self._opener.addheaders = [refer]
 
     def _send_msg(self, to_user, data):
         """ Basic send message.
@@ -76,10 +75,12 @@ class BaseClient:
         query = urllib.urlencode(query)
         try:
             rsp = self._opener.open(url, query, timeout=5).read()
+            print "@@@"
+            print rsp
             data = json.loads(rsp)
         except urllib2.URLError, e:
             print e
-            return ''
+            return
         time.sleep(2)
         print data
 

@@ -6,7 +6,17 @@
 
 from message import Article, ArticlesMessage, TextMessage
 from utils import to_unicode
+from django.http import HttpResponse
+from robot import Robot
+import json
 
+
+def alert(request):
+    data = json.loads(request.body)
+    to_users = data.get("to_users")
+    msg = data.get("message")
+    Robot().broadcast(to_users, msg)
+    return HttpResponse("ok")
 
 class Cacti:
     a = {
@@ -27,6 +37,12 @@ class Cacti:
         "picurl": "http://bulb.sinaapp.com/site_media/img/a.jpg",
         "link":   "http://bulb.sinaapp.com/site_media/img/a.jpg"
         }
+
+def handler(message):
+    cmd = int(message.content)
+    from_user, to_user = message.to_user, message.from_user
+    reply = Navigator(from_user, to_user).get_reply(cmd)
+    return reply
 
 class Navigator:
     features = [Cacti.a, Cacti.b, Cacti.c]
@@ -50,8 +66,4 @@ class Navigator:
         reply.add_article(Article(**feature))
         return reply.render_xml()
 
-def handler(message):
-    cmd = int(message.content)
-    from_user, to_user = message.to_user, message.from_user
-    reply = Navigator(from_user, to_user).get_reply(cmd)
-    return reply
+
