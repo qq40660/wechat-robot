@@ -1,4 +1,4 @@
-bulb
+wechar-robot
 ====
 
-A wechat robot.
+Wechat-robot is sample server backend for Tencent wechat.
